@@ -2,6 +2,11 @@
   "name": "first-test",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "email": "valdery.jur@gmail.com",
+    "name": "Valdery Alves Paes Junior",
+    "url": "https://valderyalves.com"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
