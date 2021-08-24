@@ -1,24 +1,20 @@
-# first-test
+# Google pay button example
 
-## Project setup
-```
-yarn install
-```
+Integrates google pay with vue
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## Where's it integrated?
 
-### Compiles and minifies for production
-```
-yarn build
-```
+`src/components/GooglePay.vue`, there you can see all the implementation.
 
-### Lints and fixes files
-```
-yarn lint
-```
+## Pre-requisites
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- node 10.x +
+- npm
+
+## Running
+
+1. On root of the folder create a archive `.env` with what's on `.env.example`
+2. If you want to test GooglePay on production, just change what's on `.env` with your production setups
+3. Install the dependencies wth `yarn` or `npm i`
+4. Run `yarn serve` or `npm run serve` to run the server
+5. Open your [localhost](http://localhost:8080/)
