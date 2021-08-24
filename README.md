@@ -4,7 +4,8 @@ Integrates google pay with vue
 
 ## Where's it integrated?
 
-`src/components/GooglePay.vue`, there you can see all the implementation.
+`src/components/GooglePay.vue`, there you can see all the implementation.<br />
+If you're using nuxt or some other platform, see how to add the google script to the head (The script in this project is in `public/index.html`).
 
 ## Pre-requisites
 
