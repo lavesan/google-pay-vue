@@ -1,6 +1,6 @@
 <template>
   <div class="example">
-    <div id="google-pay-container" />
+    <div ref="googlePay" />
   </div>
 </template>
 <script>
@@ -146,7 +146,7 @@ export default {
        * @see {@link https://developers.google.com/pay/api/web/reference/client#PaymentsClient|PaymentsClient constructor}
        * @returns {google.payments.api.PaymentsClient} Google Pay API client
        */
-      function getGooglePaymentsClient() {
+      const getGooglePaymentsClient = () => {
         if (paymentsClient === null) {
           paymentsClient = new google.payments.api.PaymentsClient({
             // Alterar o environment para 'PRODUCTION' em prod
@@ -162,20 +162,22 @@ export default {
        * Display a Google Pay payment button after confirmation of the viewer's
        * ability to pay.
        */
-      function onGooglePayLoaded() {
+      const onGooglePayLoaded = () => {
         const paymentsClient = getGooglePaymentsClient();
         paymentsClient
           .isReadyToPay(getGoogleIsReadyToPayRequest())
-          .then(function (response) {
+          .then((response) => {
             if (response.result) {
               addGooglePayButton();
               // @todo prefetch payment data to improve performance after confirming site functionality
               // prefetchGooglePaymentData();
+              this.$emit('loaded', response.result);
             }
           })
-          .catch(function (err) {
+          .catch((err) => {
             // show error in developer console for debugging
             console.error(err);
+            this.$emit('loadedError', err);
           });
       }
 
@@ -185,12 +187,12 @@ export default {
        * @see {@link https://developers.google.com/pay/api/web/reference/request-objects#ButtonOptions|Button options}
        * @see {@link https://developers.google.com/pay/api/web/guides/brand-guidelines|Google Pay brand guidelines}
        */
-      function addGooglePayButton() {
+      const addGooglePayButton = () => {
         const paymentsClient = getGooglePaymentsClient();
         const button = paymentsClient.createButton({
           onClick: onGooglePaymentButtonClicked,
         });
-        document.getElementById("google-pay-container").appendChild(button);
+        this.$refs.googlePay.appendChild(button);
       }
 
       /**
@@ -226,20 +228,21 @@ export default {
       /**
        * Show Google Pay payment sheet when Google Pay payment button is clicked
        */
-      function onGooglePaymentButtonClicked() {
+      const onGooglePaymentButtonClicked = () => {
         const paymentDataRequest = getGooglePaymentDataRequest();
         paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
 
         const paymentsClient = getGooglePaymentsClient();
         paymentsClient
           .loadPaymentData(paymentDataRequest)
-          .then(function (paymentData) {
+          .then((paymentData) => {
             // handle the response
             processPayment(paymentData);
           })
-          .catch(function (err) {
+          .catch((err) => {
             // show error in developer console for debugging
             console.error(err);
+            this.$emit('paymentError', err);
           });
       }
       /**
@@ -248,12 +251,13 @@ export default {
        * @param {object} paymentData response from Google Pay API after user approves payment
        * @see {@link https://developers.google.com/pay/api/web/reference/response-objects#PaymentData|PaymentData object reference}
        */
-      function processPayment(paymentData) {
+      const processPayment = (paymentData) => {
         // show returned data in developer console for debugging
         console.log(paymentData);
         // @todo pass payment token to your gateway to process payment
         const paymentToken =
           paymentData.paymentMethodData.tokenizationData.token;
+        this.$emit('paymentSuccess', paymentToken);
       }
 
       onGooglePayLoaded();
