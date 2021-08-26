@@ -3,7 +3,12 @@
     <h1>
       Botão google pay
     </h1>
-    <GooglePay totalPrice="100.00" />
+    <GooglePay
+      totalPrice="100.00"
+      @loaded="loaded"
+      @loadedError="loadedError"
+      @paymentError="paymentError"
+      @paymentSuccess="paymentSuccess" />
   </div>
 </template>
 
@@ -14,7 +19,21 @@ export default {
   name: 'App',
   components: {
     GooglePay,
-  }
+  },
+  methods: {
+    loaded(data) {
+      console.log('loaded: ', data);
+    },
+    loadedError(data) {
+      console.log('loadedError: ', data);
+    },
+    paymentError(data) {
+      console.log('paymentError: ', data);
+    },
+    paymentSuccess(data) {
+      console.log('paymentSuccess: ', data);
+    },
+  },
 }
 </script>
 
